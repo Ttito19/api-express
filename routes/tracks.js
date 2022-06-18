@@ -1,10 +1,45 @@
 const express=require("express");
 const router= express.Router();
-const {getItems,getItem,createItem}=require("../controllers/tracks")
+const customHeader=require("../middleware/customHeader");
+const {validatorCreateItem,validatorGetItem}=require("../validators/tracks")
+const {getItems,getItem,createItem,updateItem,deleteItem}=require("../controllers/tracks")
 
 //TODO http://localhost/tracks GET, POST,DELETE, PUT
 
-router.get("/",getItems)
-router.post("/",createItem)
+/**
+ * 
+ * LISTAR ITEMS
+ * 
+ */
+ router.get("/",getItems)
+/**
+ * 
+ * CREAR ITEM
+ * 
+ */
+ router.post("/",validatorCreateItem,createItem)
+/**
+ * 
+ * OBTENER DETALLE DE ITEM
+ * 
+ */
+ router.get("/:id",validatorGetItem,getItem)
+
+ /**
+ * 
+ * ACTUALIZAR ITEM
+ * 
+ */
+  router.put("/:id",validatorCreateItem,validatorGetItem,updateItem)
+ /**
+ * 
+ * DELETE ITEM
+ * 
+ */
+  router.delete("/:id",validatorGetItem,deleteItem)
+
+
+
+
 
 module.exports=router

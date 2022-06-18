@@ -6,6 +6,5 @@ const {createItem}=require("../controllers/storage");
 
 //uploadMiddleware.single()
 //uploadMiddleware.multi()
-router.post("/", uploadMiddleware.single("myfile",createItem));
-
+router.post("/", uploadMiddleware.single("myfile"),createItem);
 module.exports = router;

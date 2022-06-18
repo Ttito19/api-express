@@ -5,7 +5,7 @@ url:{
     type:String
 },
 filename:{
-    type:Number
+    type:String 
 }
 },{
     timestamps:true, //todo createAt,updatedAt

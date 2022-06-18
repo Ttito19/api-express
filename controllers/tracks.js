@@ -1,30 +1,60 @@
-const {tracksModel}=require("../models");
+const { matchedData } = require("express-validator");
+const { tracksModel } = require("../models");
+const { handleHttpError } = require("../utils/handleError");
 /**
  * Obtener lista 
  * @param {*} req 
  * @param {*} res 
  */
-const getItems= async (req,res)=>{
+const getItems = async (req, res) => {
+    try {
+        const data = await tracksModel.find({})
+        res.send({ data })
+    } catch (e) {
+        handleHttpError(res, "ERROR_GET_ITEMS");
+    }
 
-    const data= await tracksModel.find({})
-    res.send({data})
 }
 /**
  * Obtener un detalle 
  * @param {*} req 
  * @param {*} res 
  */
-const getItem=(req,res)=>{}
+const getItem = async (req, res) => {
+
+    try {
+        req = matchedData(req);
+        const { id } = req;
+        const data = await tracksModel.findById(id)
+        res.send({ data })
+    } catch (e) {
+        handleHttpError(res, "ERROR_GET_ITEMS")
+    }
+
+}
 /**
  * Insertar un registro 
  * @param {*} req 
  * @param {*} res 
  */
-const createItem= async (req,res)=>{
-const {body}=req;
-console.log(body);
-const data= await tracksModel.create(body)
-res.send({data} )
+const createItem = async (req, res, next) => {
+
+    try {
+        // const body=req.body
+
+        //matchedData me ayuda a validar en caso intenten
+        // agregar un parametro que no està en el modelo
+        // const bodyClean=matchedData(req)
+        // req = matchedData(res);
+        // res.send({ body,bodyClean })
+
+        const { body } = matchedData(req)
+        const data = await tracksModel.create(body)
+        res.send({ data })
+    } catch (e) {
+        handleHttpError(res, "ERROR_CREATE_ITEMS");
+    }
+
 
 }
 /**
@@ -32,14 +62,40 @@ res.send({data} )
  * @param {*} req 
  * @param {*} res 
  */
-const updateItem=(req,res)=>{}
+const updateItem = async (req, res) => {
+
+    try {
+      // const { body } = matchedData(req);
+        const {id, ...body}=matchedData(req);
+        const data = await tracksModel.findOneAndUpdate(id,body)
+        res.send({ data })
+    } catch (e) {
+        handleHttpError(res, "ERROR_UPDATE_ITEMS");
+    }
+
+}
 /**
  * Eliminar registro 
  * @param {*} req 
  * @param {*} res 
  */
-const deleteItem=(req,res)=>{}
+const deleteItem = async (req, res) => { 
+
+    try {
+        req = matchedData(req);
+        const { id } = req;
+
+        // deleteOne elimina el registo
+         // delete hace un elimnado logico, no lo elimina de la base de datos
+        const data = await tracksModel.delete({_id:id})
+        res.send({ data })
+    } catch (e) {
+        console.log(e)
+        handleHttpError(res, "ERROR_DELETE_ITEM")
+    }
+
+}
 
 
 
-module.exports={getItems,getItem,createItem,updateItem,deleteItem};
+module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
