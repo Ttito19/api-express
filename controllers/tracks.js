@@ -8,8 +8,10 @@ const { handleHttpError } = require("../utils/handleError");
  */
 const getItems = async (req, res) => {
     try {
+        const user=req.user;//esto solo se obtiene si hay un token 
+    
         const data = await tracksModel.find({})
-        res.send({ data })
+        res.send({ data,user })
     } catch (e) {
         handleHttpError(res, "ERROR_GET_ITEMS");
     }
@@ -48,9 +50,10 @@ const createItem = async (req, res, next) => {
         // req = matchedData(res);
         // res.send({ body,bodyClean })
 
-        const { body } = matchedData(req)
-        const data = await tracksModel.create(body)
-        res.send({ data })
+        req = matchedData(req);
+        console.log(req);
+        const data = await tracksModel.create(req);
+        res.send({ data });
     } catch (e) {
         handleHttpError(res, "ERROR_CREATE_ITEMS");
     }

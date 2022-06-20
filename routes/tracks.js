@@ -1,8 +1,9 @@
-const express=require("express");
-const router= express.Router();
-const customHeader=require("../middleware/customHeader");
-const {validatorCreateItem,validatorGetItem}=require("../validators/tracks")
-const {getItems,getItem,createItem,updateItem,deleteItem}=require("../controllers/tracks")
+const express = require("express");
+const router = express.Router();
+const authMiddleware = require("../middleware/session");
+const checkRol = require("../middleware/rol");
+const { validatorCreateItem, validatorGetItem } = require("../validators/tracks")
+const { getItems, getItem, createItem, updateItem, deleteItem } = require("../controllers/tracks")
 
 //TODO http://localhost/tracks GET, POST,DELETE, PUT
 
@@ -11,35 +12,35 @@ const {getItems,getItem,createItem,updateItem,deleteItem}=require("../controller
  * LISTAR ITEMS
  * 
  */
- router.get("/",getItems)
+router.get("/", authMiddleware, getItems)
 /**
  * 
  * CREAR ITEM
  * 
  */
- router.post("/",validatorCreateItem,createItem)
+router.post("/", authMiddleware, checkRol(["admin"]), validatorCreateItem, createItem)
 /**
  * 
  * OBTENER DETALLE DE ITEM
  * 
  */
- router.get("/:id",validatorGetItem,getItem)
+router.get("/:id", authMiddleware, validatorGetItem, getItem)
 
- /**
- * 
- * ACTUALIZAR ITEM
- * 
- */
-  router.put("/:id",validatorCreateItem,validatorGetItem,updateItem)
- /**
- * 
- * DELETE ITEM
- * 
- */
-  router.delete("/:id",validatorGetItem,deleteItem)
-
-
+/**
+* 
+* ACTUALIZAR ITEM
+* 
+*/
+router.put("/:id", authMiddleware, validatorCreateItem, validatorGetItem, updateItem)
+/**
+* 
+* DELETE ITEM
+* 
+*/
+router.delete("/:id", validatorGetItem, deleteItem)
 
 
 
-module.exports=router
+
+
+module.exports = router
