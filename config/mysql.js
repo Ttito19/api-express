@@ -22,7 +22,7 @@ const dbConnectMysql=async()=>{
         console.log("MYSQL Conexión correcta");
     }
      catch (e) {
-        console.log("MYSQL ERROR DE CONEXIÓN,"e);
+        console.log("MYSQL ERROR DE CONEXIÓN,",e);
     }
 }
 
