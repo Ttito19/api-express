@@ -12,6 +12,7 @@ mongoose.connect(DB_URI,{
     }
 })
 }
+
 module.exports=dbConnect;
 
 
