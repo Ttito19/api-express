@@ -1,6 +1,8 @@
 const { handleHttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJwt");
 const { usersModel } = require("../models");
+const getProperties=require("../utils/handlePropertiesEngine");
+const propertieKey=getProperties();
 const authMiddleware = async (req, res, next) => {
     try {
         //validaciòn si no hay cabecera de autorizaciòn
@@ -12,11 +14,17 @@ const authMiddleware = async (req, res, next) => {
 
         // descifra el token
         const dataToken = await verifyToken(token);
-        if (!dataToken._id) {
-            handleHttpError(res, "ERROR_ID_TOKEN", 401);
+
+        if(!dataToken){
+            handleHttpError(res, "NOT_PAYLOAD_DATA", 401);
+            return;
         }
+        const query ={
+            [propertieKey.id]:dataToken[propertieKey.id]
+        }
+
         //para saber quien es el usuario
-        const user = await usersModel.findById(dataToken._id);
+        const user = await usersModel.findOne(query);
         req.user = user
         //si hay token entonces que pase
         next();

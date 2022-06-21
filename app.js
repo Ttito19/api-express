@@ -3,7 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const morganBody = require("morgan-body");
 const loggerStream=require("./utils/handleLogger");
-const dbConnect = require("./config/mongo");
+const dbConnectNosql = require("./config/mongo");
+const {dbConnectMysql}=require("./config/mysql");
+const ENGINE_DB=process.env.ENGINE_DB;
 const app = express();
 app.use(cors())
 app.use(express.json())
@@ -34,5 +36,4 @@ app.use("/api", require("./routes"));
 app.listen(port, () => {
     console.log(`Tu app está lista por http://localhost:${port}`);
 })
-
-dbConnect();
+ENGINE_DB==="nosql"?dbConnectNosql():dbConnectMysql();
