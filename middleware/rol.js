@@ -1,7 +1,7 @@
 const { handleHttpError } = require("../utils/handleError");
 /**
  * Array con los roles permitidos
- * @param {*} rol 
+ * @param {*} roles
  * @returns 
  */
 const checkRol = (roles) => (req, res, next) => {
@@ -11,6 +11,7 @@ const checkRol = (roles) => (req, res, next) => {
         //TODO:["admin","user"]
         const checkValueRol=roles.some((rolSingle)=>rolesByUser.includes(rolSingle))//TODO: me va a traer true o false
     if(!checkValueRol){
+        console.log(roles);
         handleHttpError(res, "USER_NOT_PERMISIONS", 403);
         return
     }

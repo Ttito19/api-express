@@ -38,7 +38,8 @@ const LoginCtrol = async (req, res) => {
     try {
         req = matchedData(req);
         //debemos traer el password para que haga una comparaciòn con el hash
-        const user = await usersModel.findOne({ email: req.email }).select("password name role email");
+        const user = await usersModel.findOne({ email: req.email })
+        // .select("password name role email");
         if (!user) {
             handleHttpError(res, "USER_NOT_EXISTS", 404)
             return

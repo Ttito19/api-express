@@ -8,10 +8,11 @@ mongoose.connect(DB_URI,{
     if(!err){
         console.log("CONEXIÓN CORRECTA");
     }else{
-        console.log("ERROR DE CONEXI´ÓN");
+        console.log("ERROR DE CONEXIÓN");
     }
 })
 }
+
 module.exports=dbConnect;
 
 

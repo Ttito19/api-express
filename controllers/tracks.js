@@ -6,12 +6,12 @@ const { handleHttpError } = require("../utils/handleError");
  * @param {*} req 
  * @param {*} res 
  */
-const getItems = async (req, res) => {
+ const getItems = async (req, res) => {
     try {
         const user=req.user;//esto solo se obtiene si hay un token 
     
-        const data = await tracksModel.find({})
-        res.send({ data,user })
+        const data = await tracksModel.findAllData({});
+        res.send({ data,user });
     } catch (e) {
         handleHttpError(res, "ERROR_GET_ITEMS");
     }
@@ -27,10 +27,10 @@ const getItem = async (req, res) => {
     try {
         req = matchedData(req);
         const { id } = req;
-        const data = await tracksModel.findById(id)
+        const data = await tracksModel.findOneData(id)
         res.send({ data })
     } catch (e) {
-        handleHttpError(res, "ERROR_GET_ITEMS")
+        handleHttpError(res, "ERROR_GET_ITEMS_DETAILS")
     }
 
 }
